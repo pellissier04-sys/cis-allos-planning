@@ -592,15 +592,9 @@ document.getElementById("btn-save").addEventListener("click", async () => {
   btn.textContent = "⏳ Enregistrement…";
 
   try {
-    const resp = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        pompier: currentPompier,
-        mois:    currentMois,
-        donnees: donnees[currentMois]
-      })
-    });
+    const payload = encodeURIComponent(JSON.stringify(donnees[currentMois]));
+    const url = `${SCRIPT_URL}?action=save&pompier=${encodeURIComponent(currentPompier)}&mois=${currentMois}&donnees=${payload}`;
+    const resp = await fetch(url);
     const json = await resp.json();
 
     if (json.error) throw new Error(json.error);
