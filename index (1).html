@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#CC2020">
+<title>CIS Allos – Disponibilités</title>
+<style>
+  /* === RESET & BASE === */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rouge:       #CC2020;
+    --rouge-dark:  #A01818;
+    --rouge-light: #FDEAEA;
+    --vert:        #3A7D2C;
+    --vert-light:  #EAF4E6;
+    --jaune:       #B87A00;
+    --jaune-light: #FFF8E1;
+    --bleu:        #1A5FAA;
+    --bleu-light:  #E8F0FB;
+    --gris-100:    #F4F4F4;
+    --gris-200:    #E8E8E8;
+    --gris-400:    #9E9E9E;
+    --gris-700:    #444444;
+    --gris-900:    #1A1A1A;
+    --blanc:       #FFFFFF;
+    --radius:      10px;
+    --radius-sm:   6px;
+    --shadow:      0 2px 8px rgba(0,0,0,0.10);
+  }
+
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--gris-100);
+    color: var(--gris-900);
+    min-height: 100vh;
+    padding-bottom: 2rem;
+  }
+
+  /* === HEADER === */
+  header {
+    background: var(--rouge);
+    color: #fff;
+    padding: 14px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  header .logo {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  header h1 { font-size: 15px; font-weight: 600; line-height: 1.2; }
+  header p  { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+
+  /* === ÉCRAN DE CONNEXION === */
+  #screen-login {
+    padding: 24px 16px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .login-card {
+    background: var(--blanc);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    box-shadow: var(--shadow);
+  }
+  .login-card h2 {
+    font-size: 17px; font-weight: 600;
+    margin-bottom: 6px; color: var(--gris-900);
+  }
+  .login-card p {
+    font-size: 13px; color: var(--gris-400);
+    margin-bottom: 20px; line-height: 1.5;
+  }
+  .field-label {
+    font-size: 12px; font-weight: 600;
+    color: var(--gris-700); text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 8px; display: block;
+  }
+  select, button {
+    width: 100%; padding: 12px 14px;
+    font-size: 15px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--gris-200);
+    background: var(--blanc); color: var(--gris-900);
+    appearance: none; -webkit-appearance: none;
+    outline: none; transition: border-color 0.15s;
+  }
+  select:focus { border-color: var(--rouge); }
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: "▾"; position: absolute;
+    right: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--gris-400); pointer-events: none; font-size: 14px;
+  }
+
+  .btn-primary {
+    background: var(--rouge); color: #fff;
+    border: none; border-radius: var(--radius-sm);
+    padding: 13px; font-size: 15px; font-weight: 600;
+    cursor: pointer; margin-top: 16px;
+    transition: background 0.15s, transform 0.1s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary:active { background: var(--rouge-dark); transform: scale(0.98); }
+  .btn-primary:disabled { background: var(--gris-200); color: var(--gris-400); cursor: not-allowed; transform: none; }
+
+  /* === ÉCRAN PLANNING === */
+  #screen-planning { display: none; }
+
+  .user-bar {
+    background: var(--blanc);
+    padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--gris-200);
+    font-size: 13px;
+  }
+  .user-badge {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 600; color: var(--rouge);
+  }
+  .user-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--rouge-light); color: var(--rouge);
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-deconnexion {
+    font-size: 12px; color: var(--gris-400);
+    background: none; border: none; width: auto; padding: 4px 8px;
+    cursor: pointer; text-decoration: underline;
+  }
+
+  /* Onglets mois */
+  .month-tabs {
+    display: flex; gap: 0;
+    background: var(--blanc);
+    border-bottom: 1px solid var(--gris-200);
+    position: sticky; top: 62px; z-index: 90;
+  }
+  .month-tab {
+    flex: 1; padding: 11px 8px;
+    text-align: center; font-size: 14px; font-weight: 500;
+    color: var(--gris-400); background: none; border: none;
+    border-bottom: 3px solid transparent; cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    width: auto;
+  }
+  .month-tab.active {
+    color: var(--rouge); border-bottom-color: var(--rouge); font-weight: 600;
+  }
+
+  /* Zone planning */
+  #planning-content {
+    max-width: 480px; margin: 0 auto; padding: 12px 12px 80px;
+  }
+
+  /* Légende */
+  .legend {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    background: var(--blanc); border-radius: var(--radius);
+    padding: 10px 14px; margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .leg { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--gris-700); }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* Bloc jour */
+  .day-block {
+    background: var(--blanc);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .day-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px 8px;
+    border-bottom: 1px solid var(--gris-200);
+  }
+  .day-name { font-size: 14px; font-weight: 600; }
+  .day-totaux {
+    display: flex; gap: 6px;
+  }
+  .total-badge {
+    font-size: 11px; font-weight: 600;
+    padding: 2px 7px; border-radius: 20px;
+  }
+  .total-badge.bleu  { background: var(--bleu-light);  color: var(--bleu); }
+  .total-badge.vert  { background: var(--vert-light);  color: var(--vert); }
+  .total-badge.rouge { background: var(--rouge-light); color: var(--rouge); }
+
+  .slots-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+  }
+  .slot {
+    padding: 8px 10px;
+  }
+  .slot:first-child { border-right: 1px solid var(--gris-200); }
+  .slot-label {
+    font-size: 11px; color: var(--gris-400); margin-bottom: 6px; font-weight: 500;
+  }
+  .btn-group { display: flex; gap: 4px; }
+  .btn-slot {
+    flex: 1; padding: 8px 2px;
+    font-size: 12px; font-weight: 600;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--gris-200);
+    background: var(--gris-100); color: var(--gris-400);
+    cursor: pointer; text-align: center;
+    transition: all 0.12s; width: auto;
+  }
+  .btn-slot:active { transform: scale(0.96); }
+  .btn-slot.sel-d   { background: var(--vert-light);  border-color: var(--vert);  color: var(--vert); }
+  .btn-slot.sel-bip { background: var(--jaune-light); border-color: var(--jaune); color: var(--jaune); }
+  .btn-slot.sel-ind { background: var(--rouge-light); border-color: var(--rouge); color: var(--rouge); }
+  .btn-slot.sel-vide{ background: var(--blanc); border-color: var(--gris-200); color: var(--gris-400); }
+
+  /* Barre de sauvegarde fixe */
+  .save-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--blanc);
+    border-top: 1px solid var(--gris-200);
+    padding: 10px 16px 12px;
+    z-index: 200;
+  }
+  .save-bar-inner { max-width: 480px; margin: 0 auto; }
+  #btn-save {
+    background: var(--rouge); color: #fff; border: none;
+    border-radius: var(--radius-sm); padding: 13px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background 0.15s, transform 0.1s;
+  }
+  #btn-save:active   { background: var(--rouge-dark); transform: scale(0.98); }
+  #btn-save:disabled { background: var(--gris-200); color: var(--gris-400); cursor: not-allowed; transform: none; }
+  #btn-save.saved    { background: var(--vert); }
+
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--gris-900); color: #fff;
+    padding: 10px 20px; border-radius: 24px;
+    font-size: 13px; font-weight: 500;
+    opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 300;
+    white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Loader */
+  .loader {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 48px 16px; gap: 14px;
+    color: var(--gris-400); font-size: 14px;
+  }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--gris-200);
+    border-top-color: var(--rouge);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Erreur */
+  .msg-erreur {
+    background: var(--rouge-light); color: var(--rouge);
+    border-radius: var(--radius); padding: 14px 16px;
+    font-size: 13px; margin: 12px 0; line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🔥</div>
+  <div>
+    <h1>CIS Allos – Disponibilités</h1>
+    <p>Juillet · Août 2026</p>
+  </div>
+</header>
+
+<!-- ÉCRAN CONNEXION -->
+<div id="screen-login">
+  <div class="login-card">
+    <h2>Bonjour, pompier !</h2>
+    <p>Sélectionne ton nom pour renseigner tes disponibilités. Tu ne pourras modifier que ta propre ligne.</p>
+
+    <label class="field-label" for="select-pompier">Ton nom</label>
+    <div class="select-wrap">
+      <select id="select-pompier">
+        <option value="">— Choisir mon nom —</option>
+        <option>Arnaud N</option>
+        <option>Bernardi G</option>
+        <option>Bernardi H</option>
+        <option>Bianco P</option>
+        <option>Choretier F</option>
+        <option>Choretier M</option>
+        <option>De Almeida M</option>
+        <option>De Haro K</option>
+        <option>Djukic P</option>
+        <option>Durand N</option>
+        <option>Franc C</option>
+        <option>Garnero J</option>
+        <option>Kasdorf P</option>
+        <option>Martin A</option>
+        <option>Mayor M</option>
+        <option>Michel J</option>
+        <option>Neri E</option>
+        <option>Pellissier S</option>
+        <option>Pizzichetta H</option>
+        <option>Pizzichetta Jf</option>
+        <option>Rachado M</option>
+        <option>Risso L</option>
+        <option>Tedeschi S</option>
+        <option>Veau-Aymes F</option>
+        <option>Veau-Aymes V</option>
+        <option>Vernon C</option>
+      </select>
+    </div>
+
+    <button class="btn-primary" id="btn-login" disabled>
+      <span>Accéder à mon planning</span> →
+    </button>
+  </div>
+</div>
+
+<!-- ÉCRAN PLANNING -->
+<div id="screen-planning">
+  <div class="user-bar">
+    <div class="user-badge">
+      <div class="user-avatar" id="user-avatar"></div>
+      <span id="user-name-display"></span>
+    </div>
+    <button class="btn-deconnexion" id="btn-deconnexion">Changer</button>
+  </div>
+
+  <div class="month-tabs">
+    <button class="month-tab active" data-mois="juillet">Juillet 2026</button>
+    <button class="month-tab"        data-mois="aout">Août 2026</button>
+  </div>
+
+  <div id="planning-content"></div>
+
+  <div class="save-bar">
+    <div class="save-bar-inner">
+      <button id="btn-save">💾 Enregistrer mes disponibilités</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ================================================================
+// CONFIGURATION – remplace par l'URL de ton déploiement Apps Script
+// ================================================================
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzR-NQYYOpkrGF5Tarke-vC-pqH3Ifez_x_7NQtzfTay5mcmNOSriizwnOxPlHMP5Xmag/exec";
+// ================================================================
+
+const DATES = {
+  juillet: [
+    "Mer 01/07","Jeu 02/07","Ven 03/07","Lun 06/07","Mar 07/07",
+    "Mer 08/07","Jeu 09/07","Ven 10/07","Lun 13/07","Mer 15/07",
+    "Jeu 16/07","Ven 17/07","Lun 20/07","Mar 21/07","Mer 22/07",
+    "Jeu 23/07","Ven 24/07","Lun 27/07","Mar 28/07","Mer 29/07",
+    "Jeu 30/07","Ven 31/07"
+  ],
+  aout: [
+    "Lun 03/08","Mar 04/08","Mer 05/08","Jeu 06/08","Ven 07/08",
+    "Lun 10/08","Mar 11/08","Mer 12/08","Jeu 13/08","Ven 14/08",
+    "Lun 17/08","Mar 18/08","Mer 19/08","Jeu 20/08","Ven 21/08",
+    "Lun 24/08","Mar 25/08","Mer 26/08","Jeu 27/08","Ven 28/08",
+    "Lun 31/08"
+  ]
+};
+
+const VALEURS = ["D", "Bip", "Ind", ""];
+const LABELS  = { "D": "D", "Bip": "Bip", "Ind": "Ind", "": "—" };
+
+let currentPompier = null;
+let currentMois    = "juillet";
+// donnees[mois][date] = { M: "D"|"Bip"|"Ind"|"", A: ... }
+let donnees = { juillet: {}, aout: {} };
+let totaux  = { juillet: {}, aout: {} };
+let loaded  = { juillet: false, aout: false };
+
+// ---- Connexion ----
+const selPompier = document.getElementById("select-pompier");
+const btnLogin   = document.getElementById("btn-login");
+
+selPompier.addEventListener("change", () => {
+  btnLogin.disabled = !selPompier.value;
+});
+
+btnLogin.addEventListener("click", () => {
+  if (!selPompier.value) return;
+  currentPompier = selPompier.value;
+  afficherPlanning();
+});
+
+document.getElementById("btn-deconnexion").addEventListener("click", () => {
+  currentPompier = null;
+  donnees = { juillet: {}, aout: {} };
+  totaux  = { juillet: {}, aout: {} };
+  loaded  = { juillet: false, aout: false };
+  selPompier.value = "";
+  btnLogin.disabled = true;
+  document.getElementById("screen-login").style.display  = "";
+  document.getElementById("screen-planning").style.display = "none";
+});
+
+// ---- Onglets mois ----
+document.querySelectorAll(".month-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".month-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    currentMois = tab.dataset.mois;
+    renderMois();
+  });
+});
+
+// ---- Afficher le planning ----
+function afficherPlanning() {
+  document.getElementById("screen-login").style.display    = "none";
+  document.getElementById("screen-planning").style.display = "block";
+
+  const initials = currentPompier.split(" ").map(w => w[0]).join("").toUpperCase().slice(0,2);
+  document.getElementById("user-avatar").textContent      = initials;
+  document.getElementById("user-name-display").textContent = currentPompier;
+
+  currentMois = "juillet";
+  document.querySelectorAll(".month-tab").forEach(t => t.classList.remove("active"));
+  document.querySelector('[data-mois="juillet"]').classList.add("active");
+
+  renderMois();
+}
+
+// ---- Rendu d'un mois ----
+function renderMois() {
+  const content = document.getElementById("planning-content");
+
+  if (loaded[currentMois]) {
+    renderJours(currentMois);
+    return;
+  }
+
+  content.innerHTML = `<div class="loader"><div class="spinner"></div><span>Chargement…</span></div>`;
+  chargerDonnees(currentMois);
+}
+
+// ---- JSONP helper ----
+function jsonp(url) {
+  return new Promise((resolve, reject) => {
+    const cbName = "_cb_" + Math.random().toString(36).slice(2);
+    const script = document.createElement("script");
+    const timer  = setTimeout(() => {
+      cleanup();
+      reject(new Error("Timeout réseau"));
+    }, 15000);
+
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[cbName] = function(data) {
+      cleanup();
+      resolve(data);
+    };
+
+    script.src = url + "&callback=" + cbName;
+    script.onerror = () => { cleanup(); reject(new Error("Erreur réseau")); };
+    document.head.appendChild(script);
+  });
+}
+
+async function chargerDonnees(mois) {
+  const content = document.getElementById("planning-content");
+  try {
+    const url = `${SCRIPT_URL}?pompier=${encodeURIComponent(currentPompier)}&mois=${mois}`;
+    const json = await jsonp(url);
+
+    if (json.error) throw new Error(json.error);
+
+    donnees[mois] = json.ligne || {};
+    totaux[mois]  = json.totaux || {};
+    loaded[mois]  = true;
+    renderJours(mois);
+
+  } catch(err) {
+    content.innerHTML = `<div class="msg-erreur">
+      ⚠️ Impossible de charger les données.<br>
+      Vérifie ta connexion internet.<br><br>
+      <small>${err.message}</small>
+    </div>`;
+  }
+}
+
+function renderJours(mois) {
+  if (currentMois !== mois) return;
+  const content = document.getElementById("planning-content");
+  const dates   = DATES[mois];
+
+  let html = `<div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:var(--vert)"></div>D = Garde postée</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--jaune)"></div>Bip = Sur bip</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--rouge)"></div>Ind = Indisponible</div>
+  </div>`;
+
+  for (const date of dates) {
+    const slotM = (donnees[mois][date] || {}).M || "";
+    const slotA = (donnees[mois][date] || {}).A || "";
+    const tot   = totaux[mois][date] || {};
+    const tM    = parseInt(tot.gardesM || 0);
+    const tA    = parseInt(tot.gardesA || 0);
+
+    const badgeClass = (n) => n >= 4 ? "rouge" : n === 3 ? "vert" : n >= 1 ? "bleu" : "bleu";
+
+    html += `<div class="day-block" data-date="${date}">
+      <div class="day-header">
+        <div class="day-name">${date}</div>
+        <div class="day-totaux">
+          <span class="total-badge ${badgeClass(tM)}">M : ${tM}</span>
+          <span class="total-badge ${badgeClass(tA)}">A : ${tA}</span>
+        </div>
+      </div>
+      <div class="slots-row">
+        ${renderSlot(mois, date, "M", slotM)}
+        ${renderSlot(mois, date, "A", slotA)}
+      </div>
+    </div>`;
+  }
+
+  content.innerHTML = html;
+
+  // Attacher les events
+  content.querySelectorAll(".btn-slot").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const { date, creneau, val } = btn.dataset;
+      setValeur(mois, date, creneau, val);
+    });
+  });
+}
+
+function renderSlot(mois, date, creneau, valActuelle) {
+  const label = creneau === "M" ? "Matin 08h–13h" : "Après-midi 13h–18h";
+  let btns = "";
+  for (const v of VALEURS) {
+    const active = v === valActuelle;
+    let cls = "btn-slot";
+    if (active) {
+      if (v === "D")   cls += " sel-d";
+      else if (v === "Bip") cls += " sel-bip";
+      else if (v === "Ind") cls += " sel-ind";
+      else cls += " sel-vide";
+    }
+    btns += `<button class="${cls}" data-date="${date}" data-creneau="${creneau}" data-val="${v}">${LABELS[v]}</button>`;
+  }
+  return `<div class="slot">
+    <div class="slot-label">${label}</div>
+    <div class="btn-group">${btns}</div>
+  </div>`;
+}
+
+function setValeur(mois, date, creneau, val) {
+  if (!donnees[mois][date]) donnees[mois][date] = { M: "", A: "" };
+  donnees[mois][date][creneau] = val;
+
+  // Re-render seulement le bloc du jour
+  const block = document.querySelector(`.day-block[data-date="${date}"]`);
+  if (!block) return;
+  const slotM = (donnees[mois][date] || {}).M || "";
+  const slotA = (donnees[mois][date] || {}).A || "";
+  const tot   = totaux[mois][date] || {};
+  const tM    = parseInt(tot.gardesM || 0);
+  const tA    = parseInt(tot.gardesA || 0);
+  const badgeClass = (n) => n >= 4 ? "rouge" : n === 3 ? "vert" : n >= 1 ? "bleu" : "bleu";
+
+  block.querySelector(".slots-row").innerHTML =
+    renderSlot(mois, date, "M", slotM) +
+    renderSlot(mois, date, "A", slotA);
+
+  block.querySelector(".day-totaux").innerHTML =
+    `<span class="total-badge ${badgeClass(tM)}">M : ${tM}</span>
+     <span class="total-badge ${badgeClass(tA)}">A : ${tA}</span>`;
+
+  block.querySelectorAll(".btn-slot").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const { date, creneau, val } = btn.dataset;
+      setValeur(mois, date, creneau, val);
+    });
+  });
+
+  // Remettre le bouton save en état normal
+  const btnSave = document.getElementById("btn-save");
+  btnSave.classList.remove("saved");
+  btnSave.textContent = "💾 Enregistrer mes disponibilités";
+  btnSave.disabled = false;
+}
+
+// ---- Sauvegarde ----
+document.getElementById("btn-save").addEventListener("click", async () => {
+  const btn = document.getElementById("btn-save");
+  btn.disabled = true;
+  btn.textContent = "⏳ Enregistrement…";
+
+  try {
+    const payload = encodeURIComponent(JSON.stringify(donnees[currentMois]));
+    const url = `${SCRIPT_URL}?action=save&pompier=${encodeURIComponent(currentPompier)}&mois=${currentMois}&donnees=${payload}`;
+    const json = await jsonp(url);
+
+    if (json.error) throw new Error(json.error);
+
+    btn.classList.add("saved");
+    btn.textContent = "✅ Enregistré !";
+    showToast("Disponibilités enregistrées ✓");
+
+    setTimeout(() => {
+      btn.disabled = false;
+    }, 2000);
+
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = "💾 Enregistrer mes disponibilités";
+    showToast("❌ Erreur : " + err.message);
+  }
+});
+
+// ---- Toast ----
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+</script>
+</body>
+</html>
