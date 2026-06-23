@@ -434,7 +434,7 @@ document.querySelectorAll(".month-tab").forEach(tab => {
 // ---- Afficher le planning ----
 function afficherPlanning() {
   document.getElementById("screen-login").style.display    = "none";
-  document.getElementById("screen-planning").style.display = "";
+  document.getElementById("screen-planning").style.display = "block";
 
   const initials = currentPompier.split(" ").map(w => w[0]).join("").toUpperCase().slice(0,2);
   document.getElementById("user-avatar").textContent      = initials;
@@ -649,4 +649,3 @@ function showToast(msg) {
 </script>
 </body>
 </html>
- 
