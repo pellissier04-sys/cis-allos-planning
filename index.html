@@ -434,7 +434,7 @@ document.querySelectorAll(".month-tab").forEach(tab => {
 // ---- Afficher le planning ----
 function afficherPlanning() {
   document.getElementById("screen-login").style.display    = "none";
-  document.getElementById("screen-planning").style.display = "block";
+  document.getElementById("screen-planning").style.display = "";
 
   const initials = currentPompier.split(" ").map(w => w[0]).join("").toUpperCase().slice(0,2);
   document.getElementById("user-avatar").textContent      = initials;
@@ -460,38 +460,12 @@ function renderMois() {
   chargerDonnees(currentMois);
 }
 
-// ---- JSONP helper ----
-function jsonp(url) {
-  return new Promise((resolve, reject) => {
-    const cbName = "_cb_" + Math.random().toString(36).slice(2);
-    const script = document.createElement("script");
-    const timer  = setTimeout(() => {
-      cleanup();
-      reject(new Error("Timeout réseau"));
-    }, 15000);
-
-    function cleanup() {
-      clearTimeout(timer);
-      delete window[cbName];
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    window[cbName] = function(data) {
-      cleanup();
-      resolve(data);
-    };
-
-    script.src = url + "&callback=" + cbName;
-    script.onerror = () => { cleanup(); reject(new Error("Erreur réseau")); };
-    document.head.appendChild(script);
-  });
-}
-
 async function chargerDonnees(mois) {
   const content = document.getElementById("planning-content");
   try {
     const url = `${SCRIPT_URL}?pompier=${encodeURIComponent(currentPompier)}&mois=${mois}`;
-    const json = await jsonp(url);
+    const resp = await fetch(url);
+    const json = await resp.json();
 
     if (json.error) throw new Error(json.error);
 
@@ -618,9 +592,16 @@ document.getElementById("btn-save").addEventListener("click", async () => {
   btn.textContent = "⏳ Enregistrement…";
 
   try {
-    const payload = encodeURIComponent(JSON.stringify(donnees[currentMois]));
-    const url = `${SCRIPT_URL}?action=save&pompier=${encodeURIComponent(currentPompier)}&mois=${currentMois}&donnees=${payload}`;
-    const json = await jsonp(url);
+    const resp = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pompier: currentPompier,
+        mois:    currentMois,
+        donnees: donnees[currentMois]
+      })
+    });
+    const json = await resp.json();
 
     if (json.error) throw new Error(json.error);
 
