@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#CC2020">
-<title>CIS Allos – Disponibilités</title>
+<title>CIS Allos - Disponibilites</title>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   :root{
@@ -29,7 +29,7 @@
   .field-label{font-size:12px;font-weight:600;color:var(--gris-700);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;display:block;}
   select,button{width:100%;padding:12px 14px;font-size:15px;border-radius:var(--radius-sm);border:1.5px solid var(--gris-200);background:var(--blanc);color:var(--gris-900);appearance:none;-webkit-appearance:none;outline:none;}
   .select-wrap{position:relative;}
-  .select-wrap::after{content:"▾";position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--gris-400);pointer-events:none;}
+  .select-wrap::after{content:"v";position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--gris-400);pointer-events:none;}
   .btn-primary{background:var(--rouge);color:#fff;border:none;padding:13px;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.15s;}
   .btn-primary:disabled{background:var(--gris-200);color:var(--gris-400);cursor:not-allowed;}
   #screen-planning{display:none;}
@@ -79,10 +79,10 @@
 <body>
 
 <header>
-  <div class="logo">🔥</div>
+  <div class="logo">[feu]</div>
   <div>
-    <h1>CIS Allos – Disponibilités</h1>
-    <p>Juillet · Août 2026</p>
+    <h1>CIS Allos - Disponibilites</h1>
+    <p>Juillet . Aout 2026</p>
   </div>
 </header>
 
@@ -90,11 +90,11 @@
   <div style="padding:24px 16px;max-width:480px;margin:0 auto;">
     <div class="card">
       <h2>Bonjour, pompier !</h2>
-      <p>Sélectionne ton nom pour renseigner tes disponibilités.</p>
+      <p>Selectionne ton nom pour renseigner tes disponibilites.</p>
       <label class="field-label" for="select-pompier">Ton nom</label>
       <div class="select-wrap">
         <select id="select-pompier">
-          <option value="">— Choisir mon nom —</option>
+          <option value="">--- Choisir mon nom ---</option>
           <option>Arnaud N</option><option>Bernardi G</option><option>Bernardi H</option>
           <option>Bianco P</option><option>Choretier F</option><option>Choretier M</option>
           <option>De Almeida M</option><option>De Haro K</option><option>Djukic P</option>
@@ -106,7 +106,7 @@
           <option>Veau-Aymes V</option><option>Vernon C</option>
         </select>
       </div>
-      <button class="btn-primary" id="btn-login" disabled>Accéder à mon planning →</button>
+      <button class="btn-primary" id="btn-login" disabled>Acceder a mon planning -></button>
     </div>
   </div>
 </div>
@@ -121,12 +121,12 @@
   </div>
   <div class="month-tabs">
     <button class="month-tab active" data-mois="juillet">Juillet 2026</button>
-    <button class="month-tab" data-mois="aout">Août 2026</button>
+    <button class="month-tab" data-mois="aout">Aout 2026</button>
   </div>
   <div id="planning-content"></div>
   <div class="save-bar">
     <div class="save-bar-inner">
-      <button id="btn-save">💾 Enregistrer mes disponibilités</button>
+      <button id="btn-save">[save] Enregistrer mes disponibilites</button>
     </div>
   </div>
 </div>
@@ -134,14 +134,14 @@
 <div id="toast"></div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6t4jWFQADjr8EkONr7nFQEPDEYTw4aTmUOH_m7e5V3y1z0HlqHabkcAgPbD962LrF/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/METTRE_URL_ICI/exec";
 
 const DATES = {
   juillet:["Mer 01/07","Jeu 02/07","Ven 03/07","Lun 06/07","Mar 07/07","Mer 08/07","Jeu 09/07","Ven 10/07","Lun 13/07","Mer 15/07","Jeu 16/07","Ven 17/07","Lun 20/07","Mar 21/07","Mer 22/07","Jeu 23/07","Ven 24/07","Lun 27/07","Mar 28/07","Mer 29/07","Jeu 30/07","Ven 31/07"],
   aout:   ["Lun 03/08","Mar 04/08","Mer 05/08","Jeu 06/08","Ven 07/08","Lun 10/08","Mar 11/08","Mer 12/08","Jeu 13/08","Ven 14/08","Lun 17/08","Mar 18/08","Mer 19/08","Jeu 20/08","Ven 21/08","Lun 24/08","Mar 25/08","Mer 26/08","Jeu 27/08","Ven 28/08","Lun 31/08"]
 };
 const VALEURS = ["D","Bip","Ind",""];
-const LABELS  = {"D":"D","Bip":"Bip","Ind":"Ind","":"—"};
+const LABELS  = {"D":"D","Bip":"Bip","Ind":"Ind","":"---"};
 
 let currentPompier = null;
 let currentMois    = "juillet";
@@ -163,7 +163,7 @@ function jsonp(url, callback) {
   script.onerror = function() {
     delete window[name];
     document.head.removeChild(script);
-    callback(new Error("Erreur réseau"));
+    callback(new Error("Erreur reseau"));
   };
   document.head.appendChild(script);
 }
@@ -213,13 +213,13 @@ function afficherPlanning() {
 function renderMois() {
   const content = document.getElementById("planning-content");
   if (loaded[currentMois]) { renderJours(currentMois); return; }
-  content.innerHTML = '<div class="loader"><div class="spinner"></div><span>Chargement…</span></div>';
+  content.innerHTML = '<div class="loader"><div class="spinner"></div><span>Chargement...</span></div>';
   const moisCapture = currentMois;
   const url = SCRIPT_URL + "?action=getLigne&pompier=" + encodeURIComponent(currentPompier) + "&mois=" + moisCapture;
   jsonp(url, function(err, data) {
     if (err || data.error) {
       document.getElementById("planning-content").innerHTML =
-        '<div class="msg-erreur">⚠️ ' + (err ? err.message : data.error) + '</div>';
+        '<div class="msg-erreur">[!] ' + (err ? err.message : data.error) + '</div>';
       return;
     }
     donnees[moisCapture] = {};
@@ -238,7 +238,7 @@ function bc(n) { return n>=4?"badge-rouge":n>=3?"badge-vert":"badge-bleu"; }
 function renderJours(mois) {
   if (currentMois !== mois) return;
   const content = document.getElementById("planning-content");
-  let html = '<div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--vert)"></div>D = Garde postée</div><div class="leg"><div class="leg-dot" style="background:var(--jaune)"></div>Bip = Sur bip</div><div class="leg"><div class="leg-dot" style="background:var(--rouge)"></div>Ind = Indisponible</div></div>';
+  let html = '<div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--vert)"></div>D = Garde postee</div><div class="leg"><div class="leg-dot" style="background:var(--jaune)"></div>Bip = Sur bip</div><div class="leg"><div class="leg-dot" style="background:var(--rouge)"></div>Ind = Indisponible</div></div>';
   for (const date of DATES[mois]) {
     const d  = donnees[mois][date]||{M:"",A:""};
     const t  = totaux[mois][date]||{tM:0,tA:0};
@@ -249,7 +249,7 @@ function renderJours(mois) {
 }
 
 function renderSlot(mois, date, creneau, val) {
-  const label = creneau==="M"?"Matin 08h–13h":"Après-midi 13h–18h";
+  const label = creneau==="M"?"Matin 08h-13h":"Apres-midi 13h-18h";
   let btns = "";
   for (const v of VALEURS) {
     let cls = "btn-slot";
@@ -272,7 +272,7 @@ function setValeur(mois, date, creneau, val) {
   renderJours(mois);
   const btnSave = document.getElementById("btn-save");
   btnSave.classList.remove("saved");
-  btnSave.innerHTML = "💾 Enregistrer mes disponibilités";
+  btnSave.innerHTML = "[save] Enregistrer mes disponibilites";
   btnSave.disabled = false;
 }
 
@@ -280,19 +280,19 @@ function setValeur(mois, date, creneau, val) {
 document.getElementById("btn-save").addEventListener("click", () => {
   const btn = document.getElementById("btn-save");
   btn.disabled = true;
-  btn.innerHTML = "⏳ Enregistrement…";
+  btn.innerHTML = "[...] Enregistrement...";
   const donneesEnc = encodeURIComponent(JSON.stringify(donnees[currentMois]));
   const url = SCRIPT_URL + "?action=setLigne&pompier=" + encodeURIComponent(currentPompier) + "&mois=" + currentMois + "&donnees=" + donneesEnc;
   jsonp(url, function(err, data) {
     if (err || data.error) {
       btn.disabled = false;
-      btn.innerHTML = "💾 Enregistrer mes disponibilités";
-      showToast("❌ " + (err ? err.message : data.error));
+      btn.innerHTML = "[save] Enregistrer mes disponibilites";
+      showToast("[erreur] " + (err ? err.message : data.error));
       return;
     }
     btn.classList.add("saved");
-    btn.innerHTML = "✅ Enregistré !";
-    showToast("Disponibilités enregistrées ✓");
+    btn.innerHTML = "[ok] Enregistre !";
+    showToast("Disponibilites enregistrees [ok]");
     setTimeout(() => { btn.disabled = false; }, 2000);
   });
 });
