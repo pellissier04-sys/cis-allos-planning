@@ -11,20 +11,18 @@ header { background: #CC2020; color: #fff; padding: 14px 16px; display: flex; al
 header h1 { font-size: 15px; font-weight: 600; }
 header p { font-size: 12px; opacity: 0.85; margin-top: 2px; }
 .logo { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-
 #screen-login { padding: 24px 16px; max-width: 480px; margin: 0 auto; }
 .card { background: #fff; border-radius: 10px; padding: 24px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .card h2 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
 .card p { font-size: 13px; color: #9e9e9e; margin-bottom: 20px; line-height: 1.5; }
 label { font-size: 12px; font-weight: 600; color: #444; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: block; }
-.sel-wrap { position: relative; margin-bottom: 4px; }
+.sel-wrap { position: relative; }
 .sel-wrap::after { content: "v"; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #9e9e9e; pointer-events: none; }
 select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; border: 1.5px solid #e8e8e8; background: #fff; appearance: none; -webkit-appearance: none; outline: none; }
 .btn { width: 100%; padding: 13px; font-size: 15px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; margin-top: 12px; }
 .btn-rouge { background: #CC2020; color: #fff; }
 .btn-rouge:disabled { background: #e8e8e8; color: #9e9e9e; cursor: not-allowed; }
 .btn-vert { background: #3A7D2C; color: #fff; }
-
 #screen-planning { display: none; }
 .user-bar { background: #fff; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8e8e8; }
 .user-badge { font-weight: 600; color: #CC2020; font-size: 13px; }
@@ -32,12 +30,10 @@ select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; b
 .tabs { display: flex; background: #fff; border-bottom: 1px solid #e8e8e8; position: sticky; top: 62px; z-index: 90; }
 .tab { flex: 1; padding: 11px 8px; text-align: center; font-size: 14px; font-weight: 500; color: #9e9e9e; background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; }
 .tab.active { color: #CC2020; border-bottom-color: #CC2020; font-weight: 600; }
-
 #content { max-width: 480px; margin: 0 auto; padding: 12px 12px 90px; }
 .legende { display: flex; gap: 10px; flex-wrap: wrap; background: #fff; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .leg { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #444; }
 .dot { width: 10px; height: 10px; border-radius: 50%; }
-
 .jour { background: #fff; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
 .jour-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px 8px; border-bottom: 1px solid #e8e8e8; }
 .jour-nom { font-size: 14px; font-weight: 600; }
@@ -46,26 +42,21 @@ select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; b
 .badge-bleu { background: #E8F0FB; color: #1A5FAA; }
 .badge-vert { background: #EAF4E6; color: #3A7D2C; }
 .badge-rouge { background: #FDEAEA; color: #CC2020; }
-
 .creneaux { display: grid; grid-template-columns: 1fr 1fr; }
 .creneau { padding: 8px 10px; }
 .creneau:first-child { border-right: 1px solid #e8e8e8; }
 .creneau-label { font-size: 11px; color: #9e9e9e; margin-bottom: 6px; }
 .btns { display: flex; gap: 4px; }
 .btn-val { flex: 1; padding: 8px 2px; font-size: 12px; font-weight: 600; border-radius: 6px; border: 1.5px solid #e8e8e8; background: #f4f4f4; color: #9e9e9e; cursor: pointer; text-align: center; width: auto; }
-.btn-val.actif-D   { background: #EAF4E6; border-color: #3A7D2C; color: #3A7D2C; }
-.btn-val.actif-Bip { background: #FFF8E1; border-color: #B87A00; color: #B87A00; }
-.btn-val.actif-Ind { background: #FDEAEA; border-color: #CC2020; color: #CC2020; }
-.btn-val.actif-    { background: #fff; border-color: #e8e8e8; color: #9e9e9e; }
-
+.actif-D   { background: #EAF4E6 !important; border-color: #3A7D2C !important; color: #3A7D2C !important; }
+.actif-Bip { background: #FFF8E1 !important; border-color: #B87A00 !important; color: #B87A00 !important; }
+.actif-Ind { background: #FDEAEA !important; border-color: #CC2020 !important; color: #CC2020 !important; }
 .save-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e8e8e8; padding: 10px 16px 14px; z-index: 200; }
 .save-bar-inner { max-width: 480px; margin: 0 auto; }
-
 .loader { display: flex; flex-direction: column; align-items: center; padding: 48px 16px; gap: 14px; color: #9e9e9e; font-size: 14px; }
 .spinner { width: 32px; height: 32px; border: 3px solid #e8e8e8; border-top-color: #CC2020; border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .erreur { background: #FDEAEA; color: #CC2020; border-radius: 10px; padding: 14px 16px; font-size: 13px; margin: 12px 0; }
-
 #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 24px; font-size: 13px; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 300; white-space: nowrap; }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
@@ -89,32 +80,15 @@ select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; b
       <div class="sel-wrap">
         <select id="sel-nom">
           <option value="">-- Choisir mon nom --</option>
-          <option>Arnaud N</option>
-          <option>Bernardi G</option>
-          <option>Bernardi H</option>
-          <option>Bianco P</option>
-          <option>Choretier F</option>
-          <option>Choretier M</option>
-          <option>De Almeida M</option>
-          <option>De Haro K</option>
-          <option>Djukic P</option>
-          <option>Durand N</option>
-          <option>Franc C</option>
-          <option>Garnero J</option>
-          <option>Kasdorf P</option>
-          <option>Martin A</option>
-          <option>Mayor M</option>
-          <option>Michel J</option>
-          <option>Neri E</option>
-          <option>Pellissier S</option>
-          <option>Pizzichetta H</option>
-          <option>Pizzichetta Jf</option>
-          <option>Rachado M</option>
-          <option>Risso L</option>
-          <option>Tedeschi S</option>
-          <option>Veau-Aymes F</option>
-          <option>Veau-Aymes V</option>
-          <option>Vernon C</option>
+          <option>Arnaud N</option><option>Bernardi G</option><option>Bernardi H</option>
+          <option>Bianco P</option><option>Choretier F</option><option>Choretier M</option>
+          <option>De Almeida M</option><option>De Haro K</option><option>Djukic P</option>
+          <option>Durand N</option><option>Franc C</option><option>Garnero J</option>
+          <option>Kasdorf P</option><option>Martin A</option><option>Mayor M</option>
+          <option>Michel J</option><option>Neri E</option><option>Pellissier S</option>
+          <option>Pizzichetta H</option><option>Pizzichetta Jf</option><option>Rachado M</option>
+          <option>Risso L</option><option>Tedeschi S</option><option>Veau-Aymes F</option>
+          <option>Veau-Aymes V</option><option>Vernon C</option>
         </select>
       </div>
       <button class="btn btn-rouge" id="btn-login" disabled>Acceder a mon planning</button>
@@ -154,33 +128,26 @@ var mois = "juillet";
 var donnees = { juillet: {}, aout: {} };
 var totaux  = { juillet: {}, aout: {} };
 var loaded  = { juillet: false, aout: false };
-var cbId = 0;
 
-function callWorker(params, callback) {
-  var name = "_cb" + (++cbId);
-  var url = WORKER + "?" + params + "&callback=" + name;
-  window[name] = function(data) {
-    try { delete window[name]; } catch(e) {}
-    document.getElementById("_s" + cbId) && document.getElementById("_s" + cbId).remove();
-    callback(null, data);
-  };
-  var s = document.createElement("script");
-  s.id = "_s" + cbId;
-  s.onerror = function() {
-    try { delete window[name]; } catch(e) {}
-    s.remove();
-    callback(new Error("Erreur reseau"), null);
-  };
-  s.src = url;
-  document.head.appendChild(s);
+async function appeler(params) {
+  var url = WORKER + "?" + params;
+  var resp = await fetch(url);
+  var text = await resp.text();
+  // Enlever le wrapper callback si present
+  text = text.trim();
+  if (text.startsWith("_cb") || text.indexOf("(") < 20) {
+    text = text.substring(text.indexOf("(") + 1, text.lastIndexOf(")"));
+  }
+  return JSON.parse(text);
 }
 
-// Login
-var selNom  = document.getElementById("sel-nom");
+var selNom   = document.getElementById("sel-nom");
 var btnLogin = document.getElementById("btn-login");
+
 selNom.addEventListener("change", function() {
   btnLogin.disabled = !selNom.value;
 });
+
 btnLogin.addEventListener("click", function() {
   if (!selNom.value) return;
   pompier = selNom.value;
@@ -213,14 +180,11 @@ document.querySelectorAll(".tab").forEach(function(tab) {
   });
 });
 
-function charger(m) {
+async function charger(m) {
   document.getElementById("content").innerHTML = '<div class="loader"><div class="spinner"></div><span>Chargement...</span></div>';
-  var params = "action=getLigne&pompier=" + encodeURIComponent(pompier) + "&mois=" + m;
-  callWorker(params, function(err, data) {
-    if (err || !data || data.error) {
-      document.getElementById("content").innerHTML = '<div class="erreur">Erreur : ' + (err ? err.message : data.error) + '</div>';
-      return;
-    }
+  try {
+    var data = await appeler("action=getLigne&pompier=" + encodeURIComponent(pompier) + "&mois=" + m);
+    if (data.error) throw new Error(data.error);
     donnees[m] = {};
     totaux[m]  = {};
     var ligne = data.ligne || {};
@@ -230,7 +194,9 @@ function charger(m) {
     }
     loaded[m] = true;
     afficher(m);
-  });
+  } catch(err) {
+    document.getElementById("content").innerHTML = '<div class="erreur">Erreur : ' + err.message + '</div>';
+  }
 }
 
 function bc(n) { n = parseInt(n); return n >= 4 ? "badge-rouge" : n >= 3 ? "badge-vert" : "badge-bleu"; }
@@ -243,99 +209,76 @@ function afficher(m) {
   html += '<div class="leg"><div class="dot" style="background:#B87A00"></div>Bip = Sur bip</div>';
   html += '<div class="leg"><div class="dot" style="background:#CC2020"></div>Ind = Indispo</div>';
   html += '</div>';
-
   for (var i = 0; i < dates.length; i++) {
     var date = dates[i];
     var d = donnees[m][date] || { M: "", A: "" };
     var t = totaux[m][date]  || { tM: 0, tA: 0 };
-    html += '<div class="jour">';
-    html += '<div class="jour-header">';
-    html += '<div class="jour-nom">' + date + '</div>';
-    html += '<div class="totaux"><span class="badge ' + bc(t.tM) + '">M : ' + t.tM + '</span><span class="badge ' + bc(t.tA) + '">A : ' + t.tA + '</span></div>';
-    html += '</div>';
-    html += '<div class="creneaux">' + slotHtml(m, date, "M", d.M) + slotHtml(m, date, "A", d.A) + '</div>';
+    html += '<div class="jour" data-date="' + date + '">';
+    html += '<div class="jour-header"><div class="jour-nom">' + date + '</div>';
+    html += '<div class="totaux"><span class="badge ' + bc(t.tM) + '">M : ' + t.tM + '</span><span class="badge ' + bc(t.tA) + '">A : ' + t.tA + '</span></div></div>';
+    html += '<div class="creneaux">' + slotHtml(date, "M", d.M) + slotHtml(date, "A", d.A) + '</div>';
     html += '</div>';
   }
-  document.getElementById("content").innerHTML = html;
-
-  document.querySelectorAll(".btn-val").forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      var d2 = btn.dataset.date;
-      var cr = btn.dataset.creneau;
-      var v  = btn.dataset.val;
-      if (!donnees[m][d2]) donnees[m][d2] = { M: "", A: "" };
-      donnees[m][d2][cr] = v;
-      var bloc = document.querySelector('.jour[data-date="' + d2 + '"] .creneaux');
-      if (bloc) {
-        var dM = donnees[m][d2].M;
-        var dA = donnees[m][d2].A;
-        bloc.innerHTML = slotHtml(m, d2, "M", dM) + slotHtml(m, d2, "A", dA);
-        bloc.querySelectorAll(".btn-val").forEach(function(b2) {
-          b2.addEventListener("click", arguments.callee.caller);
-        });
-        reattach(bloc, m);
-      }
-      document.getElementById("btn-save").className = "btn btn-rouge";
-      document.getElementById("btn-save").textContent = "Enregistrer mes disponibilites";
-    });
-  });
-
-  document.querySelectorAll(".jour").forEach(function(j) {
-    j.setAttribute("data-date", j.querySelector(".jour-nom").textContent);
+  var el = document.getElementById("content");
+  el.innerHTML = html;
+  el.querySelectorAll(".btn-val").forEach(function(btn) {
+    btn.addEventListener("click", function() { cliquer(btn, m); });
   });
 }
 
-function slotHtml(m, date, creneau, valActuelle) {
+function slotHtml(date, creneau, val) {
   var label = creneau === "M" ? "Matin 08h-13h" : "Apres-midi 13h-18h";
-  var vals = ["D", "Bip", "Ind", ""];
-  var lbls = { "D": "D", "Bip": "Bip", "Ind": "Ind", "": "-" };
+  var vals = ["D","Bip","Ind",""];
+  var lbls = {"D":"D","Bip":"Bip","Ind":"Ind","":"-"};
   var btns = "";
   for (var i = 0; i < vals.length; i++) {
     var v = vals[i];
-    var cls = "btn-val" + (v === valActuelle ? " actif-" + v : "");
+    var cls = "btn-val" + (v === val ? " actif-" + v : "");
     btns += '<button class="' + cls + '" data-date="' + date + '" data-creneau="' + creneau + '" data-val="' + v + '">' + lbls[v] + '</button>';
   }
   return '<div class="creneau"><div class="creneau-label">' + label + '</div><div class="btns">' + btns + '</div></div>';
 }
 
-function reattach(container, m) {
-  container.querySelectorAll(".btn-val").forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      var d2 = btn.dataset.date;
-      var cr = btn.dataset.creneau;
-      var v  = btn.dataset.val;
-      if (!donnees[m][d2]) donnees[m][d2] = { M: "", A: "" };
-      donnees[m][d2][cr] = v;
-      var bloc = btn.closest(".creneaux");
-      if (bloc) {
-        bloc.innerHTML = slotHtml(m, d2, donnees[m][d2].M !== v && cr === "M" ? "M" : "M", donnees[m][d2].M) +
-                         slotHtml(m, d2, "A", donnees[m][d2].A);
-        reattach(bloc, m);
-      }
+function cliquer(btn, m) {
+  var date = btn.dataset.date;
+  var creneau = btn.dataset.creneau;
+  var val = btn.dataset.val;
+  if (!donnees[m][date]) donnees[m][date] = { M: "", A: "" };
+  donnees[m][date][creneau] = val;
+  var jour = document.querySelector('.jour[data-date="' + date + '"]');
+  if (jour) {
+    var cr = jour.querySelector(".creneaux");
+    cr.innerHTML = slotHtml(date, "M", donnees[m][date].M) + slotHtml(date, "A", donnees[m][date].A);
+    cr.querySelectorAll(".btn-val").forEach(function(b) {
+      b.addEventListener("click", function() { cliquer(b, m); });
     });
-  });
+  }
+  var btnSave = document.getElementById("btn-save");
+  btnSave.className = "btn btn-rouge";
+  btnSave.textContent = "Enregistrer mes disponibilites";
+  btnSave.disabled = false;
 }
 
-document.getElementById("btn-save").addEventListener("click", function() {
+document.getElementById("btn-save").addEventListener("click", async function() {
   var btn = document.getElementById("btn-save");
   btn.disabled = true;
   btn.textContent = "Enregistrement...";
-  var params = "action=setLigne&pompier=" + encodeURIComponent(pompier) + "&mois=" + mois + "&donnees=" + encodeURIComponent(JSON.stringify(donnees[mois]));
-  callWorker(params, function(err, data) {
-    btn.disabled = false;
-    if (err || !data || data.error) {
-      btn.textContent = "Enregistrer mes disponibilites";
-      toast("Erreur : " + (err ? err.message : data.error));
-      return;
-    }
+  try {
+    var data = await appeler("action=setLigne&pompier=" + encodeURIComponent(pompier) + "&mois=" + mois + "&donnees=" + encodeURIComponent(JSON.stringify(donnees[mois])));
+    if (data.error) throw new Error(data.error);
     btn.className = "btn btn-vert";
     btn.textContent = "Enregistre !";
     toast("Disponibilites enregistrees !");
     setTimeout(function() {
       btn.className = "btn btn-rouge";
       btn.textContent = "Enregistrer mes disponibilites";
+      btn.disabled = false;
     }, 3000);
-  });
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = "Enregistrer mes disponibilites";
+    toast("Erreur : " + err.message);
+  }
 });
 
 function toast(msg) {
