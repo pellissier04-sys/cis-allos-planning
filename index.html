@@ -268,7 +268,7 @@ function attachEvents(container, mois) {
 function setValeur(mois, date, creneau, val) {
   if (!donnees[mois][date]) donnees[mois][date] = {M:"",A:""};
   donnees[mois][date][creneau] = val;
-  const block = document.querySelector('.day-block .day-name');
+  
   renderJours(mois);
   const btnSave = document.getElementById("btn-save");
   btnSave.classList.remove("saved");
