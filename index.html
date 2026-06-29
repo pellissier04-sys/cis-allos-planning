@@ -135,14 +135,6 @@ async function appeler(params) {
   return await resp.json();
 }
 
-  // Enlever le wrapper callback si present
-  text = text.trim();
-  if (text.startsWith("_cb") || text.indexOf("(") < 20) {
-    text = text.substring(text.indexOf("(") + 1, text.lastIndexOf(")"));
-  }
-  return JSON.parse(text);
-}
-
 var selNom   = document.getElementById("sel-nom");
 var btnLogin = document.getElementById("btn-login");
 
