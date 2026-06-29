@@ -132,7 +132,8 @@ var loaded  = { juillet: false, aout: false };
 async function appeler(params) {
   var url = WORKER + "?" + params;
   var resp = await fetch(url);
-  var text = await resp.text();
+  var await resp.json();
+}
   // Enlever le wrapper callback si present
   text = text.trim();
   if (text.startsWith("_cb") || text.indexOf("(") < 20) {
