@@ -142,17 +142,17 @@ selNom.addEventListener("change", function() {
   btnLogin.disabled = !selNom.value;
 });
 
-btnLogin.addEventListener("click", function() {
+btnLogin.onclick = function() {
   if (!selNom.value) return;
   pompier = selNom.value;
   document.getElementById("user-nom").textContent = pompier;
   document.getElementById("screen-login").style.display = "none";
-  document.getElementById("screen-planning").style.display = "";
+  document.getElementById("screen-planning").style.display = "block";
   mois = "juillet";
   document.querySelectorAll(".tab").forEach(function(t) { t.classList.remove("active"); });
   document.querySelector('[data-mois="juillet"]').classList.add("active");
   charger("juillet");
-});
+};
 
 document.getElementById("btn-changer").addEventListener("click", function() {
   pompier = null;
