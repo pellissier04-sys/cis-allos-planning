@@ -64,7 +64,7 @@ select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; b
 <body>
 
 <header>
-  <div class="logo">F</div>
+  <div class="logo">🔥</div>
   <div>
     <h1>CIS Allos - Disponibilites</h1>
     <p>Juillet - Aout 2026</p>
@@ -227,7 +227,7 @@ function slotHtml(date, creneau, val) {
   var btns = "";
   for (var i = 0; i < vals.length; i++) {
     var v = vals[i];
-    var cls = "btn-val" + (v === val ? " actif-" + v : "");
+    var cls = "btn-val" + (v === val ? " actif-" + (v || "vide") : "");
     btns += '<button class="' + cls + '" data-date="' + date + '" data-creneau="' + creneau + '" data-val="' + v + '">' + lbls[v] + '</button>';
   }
   return '<div class="creneau"><div class="creneau-label">' + label + '</div><div class="btns">' + btns + '</div></div>';
