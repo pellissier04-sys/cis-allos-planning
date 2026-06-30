@@ -59,6 +59,14 @@ select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; b
 .erreur { background: #FDEAEA; color: #CC2020; border-radius: 10px; padding: 14px 16px; font-size: 13px; margin: 12px 0; }
 #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 24px; font-size: 13px; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 300; white-space: nowrap; }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.visu-liste { padding: 4px 14px 8px; }
+.visu-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f0f0f0; gap: 10px; }
+.visu-row:last-child { border-bottom: none; }
+.visu-nom { font-size: 13px; color: #1a1a1a; flex: 1; }
+.visu-badges { display: flex; gap: 5px; flex-shrink: 0; }
+.visu-badge { font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 6px; border: 1.5px solid #e8e8e8; background: #f4f4f4; color: #9e9e9e; min-width: 30px; text-align: center; }
+.btn-visu-toggle { background: #1A5FAA; color: #fff; }
+
 </style>
 </head>
 <body>
@@ -99,7 +107,10 @@ select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; b
 <div id="screen-planning" style="display:none">
   <div class="user-bar">
     <div class="user-badge" id="user-nom"></div>
-    <button class="btn-txt" id="btn-changer">Changer</button>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button class="btn-txt" id="btn-visu" style="text-decoration:none;color:#1A5FAA;font-weight:600;">👁 Planning equipe</button>
+      <button class="btn-txt" id="btn-changer">Changer</button>
+    </div>
   </div>
   <div class="tabs">
     <button class="tab active" data-mois="juillet">Juillet 2026</button>
@@ -141,6 +152,8 @@ var mois = "juillet";
 var donnees = { juillet: {}, aout: {} };
 var totaux  = { juillet: {}, aout: {} };
 var loaded  = { juillet: false, aout: false };
+var modeVisu = false;
+var visuData  = { juillet: null, aout: null };
 
 async function appeler(params) {
   var url = WORKER + "?" + params;
@@ -172,6 +185,10 @@ document.getElementById("btn-changer").addEventListener("click", function() {
   donnees = { juillet: {}, aout: {} };
   totaux  = { juillet: {}, aout: {} };
   loaded  = { juillet: false, aout: false };
+  modeVisu = false;
+  visuData = { juillet: null, aout: null };
+  document.getElementById("btn-visu").textContent = "👁 Planning equipe";
+  document.querySelector(".save-bar").style.display = "";
   selNom.value = "";
   btnLogin.disabled = true;
   document.getElementById("screen-login").style.display = "";
@@ -183,9 +200,74 @@ document.querySelectorAll(".tab").forEach(function(tab) {
     document.querySelectorAll(".tab").forEach(function(t) { t.classList.remove("active"); });
     tab.classList.add("active");
     mois = tab.dataset.mois;
-    if (loaded[mois]) { afficher(mois); } else { charger(mois); }
+    if (modeVisu) {
+      if (visuData[mois]) { afficherVisu(mois); } else { chargerVisu(mois); }
+    } else {
+      if (loaded[mois]) { afficher(mois); } else { charger(mois); }
+    }
   });
 });
+
+document.getElementById("btn-visu").addEventListener("click", function() {
+  modeVisu = !modeVisu;
+  var btn = document.getElementById("btn-visu");
+  var saveBar = document.querySelector(".save-bar");
+  if (modeVisu) {
+    btn.textContent = "✏️ Mon planning";
+    saveBar.style.display = "none";
+    if (visuData[mois]) { afficherVisu(mois); } else { chargerVisu(mois); }
+  } else {
+    btn.textContent = "👁 Planning equipe";
+    saveBar.style.display = "";
+    if (loaded[mois]) { afficher(mois); } else { charger(mois); }
+  }
+});
+
+async function chargerVisu(m) {
+  document.getElementById("content").innerHTML = '<div class="loader"><div class="spinner"></div><span>Chargement...</span></div>';
+  try {
+    var data = await appeler("action=getPlanning&mois=" + m);
+    if (data.error) throw new Error(data.error);
+    visuData[m] = data;
+    afficherVisu(m);
+  } catch(err) {
+    document.getElementById("content").innerHTML = '<div class="erreur">Erreur : ' + err.message + '</div>';
+  }
+}
+
+function afficherVisu(m) {
+  if (mois !== m || !modeVisu) return;
+  var data = visuData[m];
+  if (!data) return;
+  var dates = DATES[m];
+  var noms = Object.keys(data.pompiers || {});
+  var html = '<div class="legende">';
+  html += '<div class="leg"><div class="dot" style="background:#3A7D2C"></div>D = Garde</div>';
+  html += '<div class="leg"><div class="dot" style="background:#B87A00"></div>Bip = Sur bip</div>';
+  html += '<div class="leg"><div class="dot" style="background:#CC2020"></div>Ind = Indispo</div>';
+  html += '</div>';
+  for (var i = 0; i < dates.length; i++) {
+    var date = dates[i];
+    var t = (data.totaux && data.totaux[date]) || { tM: 0, tA: 0 };
+    html += '<div class="jour" data-date="' + date + '">';
+    html += '<div class="jour-header"><div class="jour-nom">' + date + '</div>';
+    html += '<div class="totaux"><span class="badge ' + bc(t.tM) + '">M : ' + t.tM + '</span><span class="badge ' + bc(t.tA) + '">A : ' + t.tA + '</span></div></div>';
+    html += '<div class="visu-liste">';
+    for (var j = 0; j < noms.length; j++) {
+      var nom = noms[j];
+      var ligne = (data.pompiers[nom] && data.pompiers[nom][date]) || { M: "", A: "" };
+      html += '<div class="visu-row"><div class="visu-nom">' + nom + '</div><div class="visu-badges">' + visuBadge(ligne.M) + visuBadge(ligne.A) + '</div></div>';
+    }
+    html += '</div></div>';
+  }
+  document.getElementById("content").innerHTML = html;
+}
+
+function visuBadge(val) {
+  var cls = val === "D" ? "actif-D" : val === "Bip" ? "actif-Bip" : val === "Ind" ? "actif-Ind" : "";
+  var lbl = val || "-";
+  return '<span class="visu-badge ' + cls + '">' + lbl + '</span>';
+}
 
 async function charger(m) {
   document.getElementById("content").innerHTML = '<div class="loader"><div class="spinner"></div><span>Chargement...</span></div>';
