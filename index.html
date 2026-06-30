@@ -156,8 +156,8 @@ var modeVisu = false;
 var visuData  = { juillet: null, aout: null };
 
 async function appeler(params) {
-  var url = WORKER + "?" + params;
-  var resp = await fetch(url);
+  var url = WORKER + "?" + params + "&_t=" + Date.now();
+  var resp = await fetch(url, { cache: "no-store" });
   return await resp.json();
 }
 
