@@ -118,6 +118,19 @@ select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; b
 <script>
 var WORKER = "https://cis-allos-proxy.pellissier04.workers.dev";
 
+var IDS = {
+  "arnaud-n": "Arnaud N", "bernardi-g": "Bernardi G", "bernardi-h": "Bernardi H",
+  "bianco-p": "Bianco P", "choretier-f": "Choretier F", "choretier-m": "Choretier M",
+  "de-almeida-m": "De Almeida M", "de-haro-k": "De Haro K", "djukic-p": "Djukic P",
+  "durand-n": "Durand N", "franc-c": "Franc C", "garnero-j": "Garnero J",
+  "kasdorf-p": "Kasdorf P", "lemaire-e": "Lemaire E", "martin-a": "Martin A", "mayor-m": "Mayor M",
+  "michel-j": "Michel J", "neri-e": "Neri E", "pellissier-s": "Pellissier S",
+  "pizzichetta-h": "Pizzichetta H", "pizzichetta-jf": "Pizzichetta Jf", "rachado-m": "Rachado M",
+  "risso-l": "Risso L", "tedeschi-s": "Tedeschi S", "veau-aymes-f": "Veau-Aymes F",
+  "veau-aymes-v": "Veau-Aymes V", "vernon-c": "Vernon C"
+};
+var pompierVerrouille = false;
+
 var DATES = {
   juillet: ["Mer 01/07","Jeu 02/07","Ven 03/07","Lun 06/07","Mar 07/07","Mer 08/07","Jeu 09/07","Ven 10/07","Lun 13/07","Mer 15/07","Jeu 16/07","Ven 17/07","Lun 20/07","Mar 21/07","Mer 22/07","Jeu 23/07","Ven 24/07","Lun 27/07","Mar 28/07","Mer 29/07","Jeu 30/07","Ven 31/07"],
   aout:    ["Lun 03/08","Mar 04/08","Mer 05/08","Jeu 06/08","Ven 07/08","Lun 10/08","Mar 11/08","Mer 12/08","Jeu 13/08","Ven 14/08","Lun 17/08","Mar 18/08","Mer 19/08","Jeu 20/08","Ven 21/08","Lun 24/08","Mar 25/08","Mer 26/08","Jeu 27/08","Ven 28/08","Lun 31/08"]
@@ -238,9 +251,24 @@ function cliquer(btn, m) {
   var creneau = btn.dataset.creneau;
   var val = btn.dataset.val;
   if (!donnees[m][date]) donnees[m][date] = { M: "", A: "" };
+  var ancienneVal = donnees[m][date][creneau] || "";
   donnees[m][date][creneau] = val;
+
+  // Recalcul local du total "D" (garde) pour le creneau concerne, en attendant la sync serveur
+  if (!totaux[m][date]) totaux[m][date] = { tM: 0, tA: 0 };
+  var delta = (val === "D" ? 1 : 0) - (ancienneVal === "D" ? 1 : 0);
+  if (delta !== 0) {
+    var cle = creneau === "M" ? "tM" : "tA";
+    totaux[m][date][cle] = Math.max(0, (totaux[m][date][cle] || 0) + delta);
+  }
+
   var jour = document.querySelector('.jour[data-date="' + date + '"]');
   if (jour) {
+    var t = totaux[m][date];
+    var totEl = jour.querySelector(".totaux");
+    if (totEl) {
+      totEl.innerHTML = '<span class="badge ' + bc(t.tM) + '">M : ' + t.tM + '</span><span class="badge ' + bc(t.tA) + '">A : ' + t.tA + '</span>';
+    }
     var cr = jour.querySelector(".creneaux");
     cr.innerHTML = slotHtml(date, "M", donnees[m][date].M) + slotHtml(date, "A", donnees[m][date].A);
     cr.querySelectorAll(".btn-val").forEach(function(b) {
@@ -281,6 +309,18 @@ function toast(msg) {
   t.classList.add("show");
   setTimeout(function() { t.classList.remove("show"); }, 3000);
 }
+
+(function initLienPerso() {
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get("id");
+  if (id && IDS[id]) {
+    pompierVerrouille = true;
+    selNom.value = IDS[id];
+    btnLogin.disabled = false;
+    document.getElementById("btn-changer").style.display = "none";
+    btnLogin.click();
+  }
+})();
 </script>
 </body>
 </html>
