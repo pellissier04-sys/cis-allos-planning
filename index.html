@@ -111,7 +111,7 @@ select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; b
   <div class="user-bar">
     <div class="user-badge" id="user-nom"></div>
     <div style="display:flex;gap:10px;align-items:center;">
-      <button class="btn-txt" id="btn-visu" style="text-decoration:none;color:#1A5FAA;font-weight:600;">👁 Planning equipe</button>
+      <button class="btn-txt" id="btn-visu" style="text-decoration:none;color:#1A5FAA;font-weight:600;">👁 Planning CIS</button>
       <button class="btn-txt" id="btn-changer">Changer</button>
     </div>
   </div>
@@ -190,7 +190,7 @@ document.getElementById("btn-changer").addEventListener("click", function() {
   loaded  = { juillet: false, aout: false };
   modeVisu = false;
   visuData = { juillet: null, aout: null };
-  document.getElementById("btn-visu").textContent = "👁 Planning equipe";
+  document.getElementById("btn-visu").textContent = "👁 Planning CIS";
   document.querySelector(".save-bar").style.display = "";
   selNom.value = "";
   btnLogin.disabled = true;
@@ -220,7 +220,7 @@ document.getElementById("btn-visu").addEventListener("click", function() {
     saveBar.style.display = "none";
     if (visuData[mois]) { afficherVisu(mois); } else { chargerVisu(mois); }
   } else {
-    btn.textContent = "👁 Planning equipe";
+    btn.textContent = "👁 Planning CIS";
     saveBar.style.display = "";
     if (loaded[mois]) { afficher(mois); } else { charger(mois); }
   }
