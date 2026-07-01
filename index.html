@@ -48,6 +48,9 @@ select { width: 100%; padding: 12px 14px; font-size: 15px; border-radius: 6px; b
 .creneau-label { font-size: 11px; color: #9e9e9e; margin-bottom: 6px; }
 .btns { display: flex; gap: 4px; }
 .btn-val { flex: 1; padding: 8px 2px; font-size: 12px; font-weight: 600; border-radius: 6px; border: 1.5px solid #e8e8e8; background: #f4f4f4; color: #9e9e9e; cursor: pointer; text-align: center; width: auto; }
+.btn-val:disabled { opacity: 0.4; cursor: not-allowed; }
+.jour-passe .jour-nom { color: #9e9e9e; }
+.lock-tag { font-size: 10px; font-weight: 600; color: #9e9e9e; margin-left: 6px; text-transform: none; letter-spacing: 0; }
 .actif-D   { background: #EAF4E6 !important; border-color: #3A7D2C !important; color: #3A7D2C !important; }
 .actif-Bip { background: #FFF8E1 !important; border-color: #B87A00 !important; color: #B87A00 !important; }
 .actif-Ind { background: #FDEAEA !important; border-color: #CC2020 !important; color: #CC2020 !important; }
@@ -290,6 +293,17 @@ async function charger(m) {
 
 function bc(n) { n = parseInt(n); return n >= 4 ? "badge-rouge" : n >= 3 ? "badge-vert" : "badge-bleu"; }
 
+// Verifie si un jour du planning (ex: "Mer 01/07") est deja passe par rapport a aujourd'hui.
+// Les mois affiches sont Juillet et Aout 2026.
+function estDatePassee(date) {
+  var jm = date.split(" ")[1]; // "01/07"
+  var parts = jm.split("/");
+  var jour = parseInt(parts[0], 10);
+  var moisNum = parseInt(parts[1], 10) - 1;
+  var dateJour = new Date(2026, moisNum, jour, 23, 59, 59, 999);
+  return new Date() > dateJour;
+}
+
 function afficher(m) {
   if (mois !== m) return;
   var dates = DATES[m];
@@ -302,20 +316,21 @@ function afficher(m) {
     var date = dates[i];
     var d = donnees[m][date] || { M: "", A: "" };
     var t = totaux[m][date]  || { tM: 0, tA: 0 };
-    html += '<div class="jour" data-date="' + date + '">';
-    html += '<div class="jour-header"><div class="jour-nom">' + date + '</div>';
+    var passee = estDatePassee(date);
+    html += '<div class="jour' + (passee ? " jour-passe" : "") + '" data-date="' + date + '">';
+    html += '<div class="jour-header"><div class="jour-nom">' + date + (passee ? ' <span class="lock-tag">🔒 passe</span>' : '') + '</div>';
     html += '<div class="totaux"><span class="badge ' + bc(t.tM) + '">M : ' + t.tM + '</span><span class="badge ' + bc(t.tA) + '">A : ' + t.tA + '</span></div></div>';
-    html += '<div class="creneaux">' + slotHtml(date, "M", d.M) + slotHtml(date, "A", d.A) + '</div>';
+    html += '<div class="creneaux">' + slotHtml(date, "M", d.M, passee) + slotHtml(date, "A", d.A, passee) + '</div>';
     html += '</div>';
   }
   var el = document.getElementById("content");
   el.innerHTML = html;
-  el.querySelectorAll(".btn-val").forEach(function(btn) {
+  el.querySelectorAll(".btn-val:not(:disabled)").forEach(function(btn) {
     btn.addEventListener("click", function() { cliquer(btn, m); });
   });
 }
 
-function slotHtml(date, creneau, val) {
+function slotHtml(date, creneau, val, passee) {
   var label = creneau === "M" ? "Matin 08h-13h" : "Apres-midi 13h-18h";
   var vals = ["D","Bip","Ind",""];
   var lbls = {"D":"D","Bip":"Bip","Ind":"Ind","":"-"};
@@ -323,7 +338,8 @@ function slotHtml(date, creneau, val) {
   for (var i = 0; i < vals.length; i++) {
     var v = vals[i];
     var cls = "btn-val" + (v === val ? " actif-" + (v || "vide") : "");
-    btns += '<button class="' + cls + '" data-date="' + date + '" data-creneau="' + creneau + '" data-val="' + v + '">' + lbls[v] + '</button>';
+    var disAttr = passee ? " disabled" : "";
+    btns += '<button class="' + cls + '" data-date="' + date + '" data-creneau="' + creneau + '" data-val="' + v + '"' + disAttr + '>' + lbls[v] + '</button>';
   }
   return '<div class="creneau"><div class="creneau-label">' + label + '</div><div class="btns">' + btns + '</div></div>';
 }
