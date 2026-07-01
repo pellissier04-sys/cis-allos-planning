@@ -293,15 +293,16 @@ async function charger(m) {
 
 function bc(n) { n = parseInt(n); return n >= 4 ? "badge-rouge" : n >= 3 ? "badge-vert" : "badge-bleu"; }
 
-// Verifie si un jour du planning (ex: "Mer 01/07") est deja passe par rapport a aujourd'hui.
-// Les mois affiches sont Juillet et Aout 2026.
-function estDatePassee(date) {
+// Verifie si un creneau precis (Matin ou Apres-midi) d'un jour donne est deja passe.
+// Matin (08h-13h) se verrouille a partir de 13h. Apres-midi (13h-18h) se verrouille a partir de 18h.
+function estCreneauPasse(date, creneau) {
   var jm = date.split(" ")[1]; // "01/07"
   var parts = jm.split("/");
   var jour = parseInt(parts[0], 10);
   var moisNum = parseInt(parts[1], 10) - 1;
-  var dateJour = new Date(2026, moisNum, jour, 23, 59, 59, 999);
-  return new Date() > dateJour;
+  var heureLimite = creneau === "M" ? 13 : 18;
+  var limite = new Date(2026, moisNum, jour, heureLimite, 0, 0, 0);
+  return new Date() > limite;
 }
 
 function afficher(m) {
@@ -316,11 +317,13 @@ function afficher(m) {
     var date = dates[i];
     var d = donnees[m][date] || { M: "", A: "" };
     var t = totaux[m][date]  || { tM: 0, tA: 0 };
-    var passee = estDatePassee(date);
+    var passeeM = estCreneauPasse(date, "M");
+    var passeeA = estCreneauPasse(date, "A");
+    var passee = passeeM && passeeA;
     html += '<div class="jour' + (passee ? " jour-passe" : "") + '" data-date="' + date + '">';
     html += '<div class="jour-header"><div class="jour-nom">' + date + (passee ? ' <span class="lock-tag">🔒 passe</span>' : '') + '</div>';
     html += '<div class="totaux"><span class="badge ' + bc(t.tM) + '">M : ' + t.tM + '</span><span class="badge ' + bc(t.tA) + '">A : ' + t.tA + '</span></div></div>';
-    html += '<div class="creneaux">' + slotHtml(date, "M", d.M, passee) + slotHtml(date, "A", d.A, passee) + '</div>';
+    html += '<div class="creneaux">' + slotHtml(date, "M", d.M, passeeM) + slotHtml(date, "A", d.A, passeeA) + '</div>';
     html += '</div>';
   }
   var el = document.getElementById("content");
@@ -332,6 +335,7 @@ function afficher(m) {
 
 function slotHtml(date, creneau, val, passee) {
   var label = creneau === "M" ? "Matin 08h-13h" : "Apres-midi 13h-18h";
+  if (passee) label += " 🔒";
   var vals = ["D","Bip","Ind",""];
   var lbls = {"D":"D","Bip":"Bip","Ind":"Ind","":"-"};
   var btns = "";
